@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+
+</h:head>
+<body>
+
+	<h:form id="form">
+		<p:growl id="msgs" showDetail="true" />
+
+		<p:dataTable id="usuarioList" var="usuario"
+			value="#{usuarioMBController.usuarioList}" editable="true"
+			editMode="cell" widgetVar="cellUser">
+			<f:facet name="header">
+           Usuarios
+                       <p:outputPanel>
+					<h:outputText value="Search all fields:" />
+					<p:inputText id="globalFilter" onkeyup="PF('cellUser').filter()"
+						style="width:150px" placeholder="Enter keyword" />
+				</p:outputPanel>
+			</f:facet>
+
+			<p:ajax event="cellEdit" listener="#{usuarioMBController.onCellEdit}"
+				update=":form:msgs" />
+
+			<p:column filterBy="#{usuario.login}" headerText="Id" footerText=""
+				filterMatchMode="contains">
+
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{usuario.login}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText id="modelInput" value="#{usuario.login}"
+							style="width:96%" label="Id" />
+					</f:facet>
+				</p:cellEditor>
+
+			</p:column>
+
+			<p:column headerText="Password" filterBy="#{usuario.password}"
+				footerText="" filterMatchMode="contains">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{usuario.password}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText value="#{usuario.password}" style="width:96%"
+							label="Password" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column headerText="nombres" filterBy="#{usuario.apellidosNombres}"
+				footerText=" " filterMatchMode="contains">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{usuario.apellidosNombres}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText value="#{usuario.apellidosNombres}" style="width:96%"
+							label="nombres" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column headerText="correo" filterBy="#{usuario.correo}"
+				footerText=" " filterMatchMode="contains">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{usuario.correo}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText value="#{usuario.correo}" style="width:96%"
+							label="correo" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column headerText="Estado" filterBy="#{usuario.estado}"
+				footerText=" " filterMatchMode="contains">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{usuario.estado}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText value="#{usuario.estado}" style="width:96%"
+							label="Estado" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column headerText="Fecha de la clave"
+				filterBy="#{usuario.fechaClave}" footerText=" "
+				filterMatchMode="contains">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{usuario.fechaClave}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText value="#{usuario.fechaClave}" style="width:96%"
+							label="correo" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column headerText="Tipo Usuario" filterBy="#{usuario.tipoUsuario}"
+				footerText=" " filterMatchMode="contains">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{usuario.tipoUsuario}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText value="#{usuario.tipoUsuario}" style="width:96%"
+							label="correo" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column headerText="Fecha de creación"
+				filterBy="#{usuario.fechaCreacion}" footerText=" "
+				filterMatchMode="contains">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{usuario.fechaCreacion}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText value="#{usuario.fechaCreacion}" style="width:96%"
+							label="correo" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+		</p:dataTable>
+	</h:form>
+
+
+</body>
+</html>
