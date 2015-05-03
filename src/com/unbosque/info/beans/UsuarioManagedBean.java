@@ -23,12 +23,13 @@ import org.springframework.dao.DataAccessException;
 
 
 
+
 import com.unbosque.info.entidad.Usuario;
 import com.unbosque.info.service.UsuarioService;
 
 @ManagedBean(name = "usuarioMBController")
 @ViewScoped
-public class UsuarioManagedBean implements Serializable {
+public class UsuarioManagedBean implements Serializable   {
 
 
 
@@ -62,6 +63,12 @@ public class UsuarioManagedBean implements Serializable {
 	private String passwordn;
 	private String correon;
 	private String ApellidosNombresn;
+	
+	@PostConstruct
+	public void init(){
+		usuarioList = new ArrayList<Usuario>();
+		  usuarioList.addAll(getUsuarioService().getUsuarios());
+	}
 
     public void onCellEdit(CellEditEvent event) {
         Object oldValue = event.getOldValue();
@@ -263,9 +270,7 @@ public class UsuarioManagedBean implements Serializable {
 
 
 	public List<Usuario> getUsuarioList() {
-		usuarioList = new ArrayList<Usuario>();
 
-		  usuarioList.addAll(getUsuarioService().getUsuarios());
 		return usuarioList;
 	}
 
