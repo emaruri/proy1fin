@@ -24,8 +24,6 @@ public class UsuarioService {
 
 
 
-
-
 	@Transactional(readOnly = false)
     public void addUsuario(Usuario usuario) {
         getUsuarioDAO().addUsuario(usuario);

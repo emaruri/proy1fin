@@ -66,8 +66,15 @@ public class UsuarioManagedBean implements Serializable   {
 	}
 
     public void onCellEdit(Usuario usuario1) {
+    	Usuario comp=getUsuarioService().getUsuarioById(usuario1.getId());
+    	if(!comp.getPassword().equals(usuario1.getPassword()))
+    	{
+    		usuario1.setPassword(cif.cifradoClave(usuario1.getPassword()));
+    	}
     	getUsuarioService().updateUsuario(usuario1);
-	    }
+    	
+    }
+
 	
 	public String getLoginn() {
 		return loginn;
@@ -76,15 +83,6 @@ public class UsuarioManagedBean implements Serializable   {
 	public void setLoginn(String loginn) {
 		this.loginn = loginn;
 	}
-	
-	public void onRowEdit(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage( ((Usuario)event.getObject()).getLogin() );
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-    public void onRowCancel(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Edit Cancelled");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
     
 
 	
@@ -144,29 +142,6 @@ public class UsuarioManagedBean implements Serializable   {
 		FacesContext.getCurrentInstance().addMessage(null, message);
 		context.addCallbackParam("logeado", logeado);
 		
-	}
-	
-	public void editarUsuario() {
-		try {
-
-			RequestContext context = RequestContext.getCurrentInstance();
-			FacesMessage message = null;		
-			Usuario usuario = getUsuarioService().getUsuarioByEmail(getLogin(), getCorreo());
-			if(usuario!=null){
-			//getUsuarioService().updateUsuario(usuario,usuario1);
-				usuario.setCorreo(getCorreon());
-				getUsuarioService().updateUsuario(usuario);
-				usuario.setPassword(getPasswordn());
-				getUsuarioService().updateUsuario(usuario);
-				usuario.setLogin(getLoginn());
-				getUsuarioService().updateUsuario(usuario);
-			}
-
-
-		} catch (DataAccessException e) {
-			e.printStackTrace();
-		}
-
 	}
 
 	
