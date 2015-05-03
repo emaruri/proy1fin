@@ -22,10 +22,9 @@ import org.springframework.dao.DataAccessException;
 
 
 
-
-
 import com.unbosque.info.entidad.Usuario;
 import com.unbosque.info.service.UsuarioService;
+import com.unbosque.info.util.CifrarClave;
 
 @ManagedBean(name = "usuarioMBController")
 @ViewScoped
@@ -44,21 +43,17 @@ public class UsuarioManagedBean implements Serializable   {
 
 
 	List<Usuario> usuarioList=null;
-	List<Usuario> usuarioFiltro;
-
+	private CifrarClave cif=new CifrarClave();
 	private Integer id;
 	private String apellidosNombres;
 	private String correo;
 	private String estado;
 	private Timestamp fechaClave;
 	private Timestamp fechaCreacion;
-
 	private String login;
 	private String password;
 	private String tipoUsuario;
 	private Date  fecha = new Date();
-	
-	//--------------
 	private String loginn;
 	private String passwordn;
 	private String correon;
@@ -70,14 +65,8 @@ public class UsuarioManagedBean implements Serializable   {
 		  usuarioList.addAll(getUsuarioService().getUsuarios());
 	}
 
-    public void onCellEdit(CellEditEvent event) {
-        Object oldValue = event.getOldValue();
-        Object newValue = event.getNewValue();
-         
-        if(newValue != null && !newValue.equals(oldValue)) {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cell Changed", "Old: " + oldValue + ", New:" + newValue);
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-        }
+    public void onCellEdit(Usuario usuario1) {
+    	getUsuarioService().updateUsuario(usuario1);
 	    }
 	
 	public String getLoginn() {
@@ -115,12 +104,13 @@ public class UsuarioManagedBean implements Serializable   {
      		usuario.setFechaCreacion(new Timestamp(fecha.getTime())); 
 		
 			usuario.setLogin(getLogin()); 
-			usuario.setPassword(getPassword()); 
+			usuario.setPassword(cif.cifradoClave(getPassword())); 
 			usuario.setTipoUsuario("U"); 
 
 			getUsuarioService().addUsuario(usuario);
 			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "",
 					"Registro agregado exitosamente.");
+			usuarioList=getUsuarioService().getUsuarios();
 
 		} catch (DataAccessException e) {
 			e.printStackTrace();
@@ -134,7 +124,7 @@ public class UsuarioManagedBean implements Serializable   {
 		
 		FacesMessage message = null;
 		
-		Usuario usuario=getUsuarioService().getUsuarioByLogin(getLogin(),getPassword());
+		Usuario usuario=getUsuarioService().getUsuarioByLogin(getLogin(),cif.cifradoClave(getPassword()));
 		boolean logeado=false;
 		if(usuario!=null){
 		message = new FacesMessage(FacesMessage.SEVERITY_INFO, "",
@@ -178,11 +168,7 @@ public class UsuarioManagedBean implements Serializable   {
 		}
 
 	}
-	
-	public void editarUsuario2(Usuario usuario1){
-		System.out.println(usuario1.getLogin());
-		getUsuarioService().updateUsuario(usuario1);
-	}
+
 	
 	public String getPasswordn() {
 		return passwordn;
@@ -208,16 +194,9 @@ public class UsuarioManagedBean implements Serializable   {
 		ApellidosNombresn = apellidosNombresn;
 	}
 
-	public void borrar(){
-		RequestContext context = RequestContext.getCurrentInstance();
-		Usuario usuario=getUsuarioService().getUsuarioByEmail(getLogin(), getCorreo());
-		if(usuario!=null){
-			getUsuarioService().deleteUsuario(usuario);
-		}
-		
-		
-		
-		
+	public void borrar(Usuario usuario){
+		getUsuarioService().deleteUsuario(usuario);
+		usuarioList=getUsuarioService().getUsuarios();
 	}
 	
 	
@@ -342,8 +321,15 @@ public class UsuarioManagedBean implements Serializable   {
 
 
 
+	public List<String> getTippos() {
+		return getUsuarioService().getTippos();
+	}
 
+	public List<String> getEstados() {
+		return getUsuarioService().getEstados();
+	}
 
+	
 	public Timestamp getFechaClave() {
 		return fechaClave;
 	}
@@ -431,13 +417,7 @@ public class UsuarioManagedBean implements Serializable   {
 	}
 
 	
-	public List<Usuario> getUsuariosFiltro(){
-		return usuarioFiltro;
-	}
-	
-	public void setUsuariosFiltro(List<Usuario> usus){
-		usuarioFiltro=usus;
-	}
+
 
 
 }
