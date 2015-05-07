@@ -6,30 +6,81 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-	
+<script>
+    function soloLetras(e){
+       key = e.keyCode || e.which;
+       tecla = String.fromCharCode(key).toLowerCase();
+       letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
+       especiales = "8-37-39-46";
+
+       tecla_especial = false
+       for(var i in especiales){
+            if(key == especiales[i]){
+                tecla_especial = true;
+                break;
+            }
+        }
+
+        if(letras.indexOf(tecla)==-1 ){
+        	if(!tecla_especial){
+        		
+        	
+            return false;
+        	}
+        }
+    }
+</script>	
 	</h:head>
 <body>
+	
+<p:accordionPanel>
+<p:tab title="agregar dieta">
+<h:form>
+<h:panelGrid columns="2" cellpadding="5">
+<h:outputText value="Nombre de la dieta:"/>
+<h:inputText id="nombreDieta" onkeypress="return soloLetras(event)" required="true"></h:inputText>
+<h:outputText value="Enfermedad que trata la dieta:"/>
+<h:inputText id="enfermedadDieta" onkeypress="return soloLetras(event)" required="true"></h:inputText>
+<h:outputText value="Descripción de la dieta: "></h:outputText>
+<p:inputTextarea id="descripcionDieta"></p:inputTextarea>
+</h:panelGrid>
+
+</h:form>
+
+</p:tab>
+</p:accordionPanel>
+	
 <p:accordionPanel>
 <p:tab title="Agregar usuarios:">
 <h:form>
     <h:panelGrid columns="2" cellpadding="5">
         
          <h:outputText value="ApellidosNombres: " />
-        <p:inputText id="ApellidosNombres" value="#{usuarioMBController.apellidosNombres}" required="true"/>
+        <p:inputText id="ApellidosNombres" onkeypress="return soloLetras(event)" value="#{usuarioMBController.apellidosNombres}" required="true"/>
         
 
         <h:outputText value="correo: " />
-        <p:inputText id="correo" value="#{usuarioMBController.correo}" />
+        <p:inputText id="correo" value="#{usuarioMBController.correo}" required="true" validatorMessage="Formato incorrecto, ingese un correo de tipo xxxx@xxxx.com">
+        <f:validateRegex
+		pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+        </p:inputText>
         
     
    
     
  
  		<h:outputText value="Usuario: " />
-        <p:inputText id="usuario" value="#{usuarioMBController.login}"/>
+        <p:inputText id="usuario" value="#{usuarioMBController.login}"maxlength="10" required="true">
+         <f:validateLength minimum="8" maximum="20">
+        </f:validateLength>
+        </p:inputText> 
+        
+        
         <h:outputText value="Contraseña: " />
-        <p:password id="feedback" value="#{usuarioMBController.password}" feedback="true" />
-
+        <p:password id="feedback" value="#{usuarioMBController.password}" feedback="true" maxlength="20" required="true">
+         <f:validateLength minimum="8" maximum="20">
+        </f:validateLength>
+        </p:password>
  
         
     </h:panelGrid>
