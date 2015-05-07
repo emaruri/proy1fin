@@ -38,13 +38,13 @@
 <h:form>
 <h:panelGrid columns="2" cellpadding="5">
 <h:outputText value="Nombre de la dieta:"/>
-<h:inputText id="nombreDieta" onkeypress="return soloLetras(event)" required="true"></h:inputText>
+<h:inputText id="nombreDieta" onkeypress="return soloLetras(event)" value="#{beanDieta.nombre}" required="true"></h:inputText>
 <h:outputText value="Enfermedad que trata la dieta:"/>
-<h:inputText id="enfermedadDieta" onkeypress="return soloLetras(event)" required="true"></h:inputText>
+<h:inputText id="enfermedadDieta" onkeypress="return soloLetras(event)" value="#{beanDieta.enfermedadTrata}" required="true"></h:inputText>
 <h:outputText value="Descripción de la dieta: "></h:outputText>
-<p:inputTextarea id="descripcionDieta"></p:inputTextarea>
+<p:inputTextarea id="descripcionDieta" value="#{beanDieta.descripcion}" required="true"></p:inputTextarea>
 </h:panelGrid>
-
+<p:commandButton value="Agregar dieta" ></p:commandButton>
 </h:form>
 
 </p:tab>
