@@ -6,9 +6,17 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <h:head>
+
 	
 	</h:head>
 <body>
+<a href="javascript:history.back()">Atras</a>
+<h:form>
+<h:commandButton value="dietas" action="dietas?faces-redirect=true" />
+<h:commandButton value="phclinica" action="phclinica?faces-redirect=true" />
+<h:commandButton value="pacientes" action="pacientes?faces-redirect=true" />
+</h:form>
+
 <p:accordionPanel>
 <p:tab title="Agregar usuarios:">
 <h:form>
@@ -49,11 +57,11 @@
 </h:form>
 </p:tab>
 </p:accordionPanel>
+
 	<p:growl id="msgs" showDetail="true" />
 
 	<h:form id="form">
 		<p:growl id="msgs" showDetail="true" />
-
 		<p:dataTable id="usuarioList" var="usuario"
 			value="#{usuarioMBController.usuarioList}" editable="true"
 			editMode="cell" widgetVar="cellUser">
@@ -137,19 +145,6 @@
 				</p:cellEditor>
 			</p:column>
 
-			<p:column headerText="Fecha de la clave"
-				filterBy="#{usuario.fechaClave}" footerText=" "
-				filterMatchMode="contains">
-				<p:cellEditor>
-					<f:facet name="output">
-						<h:outputText value="#{usuario.fechaClave}" />
-					</f:facet>
-					<f:facet name="input">
-						<p:inputText value="#{usuario.fechaClave}" style="width:96%"
-							label="correo" />
-					</f:facet>
-				</p:cellEditor>
-			</p:column>
 
 			<p:column headerText="Tipo Usuario" filterBy="#{usuario.tipoUsuario}"
 				footerText=" " filterMatchMode="contains">
@@ -168,16 +163,11 @@
 			<p:column headerText="Fecha de creación"
 				filterBy="#{usuario.fechaCreacion}" footerText=" "
 				filterMatchMode="contains">
-				<p:cellEditor>
-					<f:facet name="output">
 						<h:outputText value="#{usuario.fechaCreacion}" />
-					</f:facet>
-					<f:facet name="input">
-						<p:inputText value="#{usuario.fechaCreacion}" style="width:96%"
-							label="correo" />
-					</f:facet>
-				</p:cellEditor>
 			</p:column>
+			
+			
+			
 			<p:column>
                     <p:commandButton icon="ui-icon-trash"
                         title="Borrar este usuario"
@@ -186,6 +176,7 @@
                 </p:column>
 		</p:dataTable>
 	</h:form>
+	
 
 <br/>
 </body>

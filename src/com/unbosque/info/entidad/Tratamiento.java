@@ -1,6 +1,7 @@
 package com.unbosque.info.entidad;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
 
 
@@ -17,6 +18,8 @@ public class Tratamiento implements Serializable {
 
 	private String estado;
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	public Tratamiento() {
@@ -45,5 +48,10 @@ public class Tratamiento implements Serializable {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+   
+	@Override
+    public String toString() {
+        return descripcion;
+    }
 
 }

@@ -9,10 +9,12 @@ import com.unbosque.info.entidad.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-// actionListener="#{actorsMB.remove(item)}"
+
+
 @Service("UsuarioService")
 @Transactional(readOnly = true)
 public class UsuarioService {
+	
 	
 	
     // CustomerDAO is injected...
@@ -52,6 +54,11 @@ public class UsuarioService {
     public Usuario getUsuarioByEmail(String login,String correo){
     	return getUsuarioDAO().getUsuarioByEmail(login, correo);
     }
+    
+    @Transactional(readOnly = false)
+	public Usuario getUsuarioByName(String login){
+		return getUsuarioDAO().getUsuarioByname(login);
+	}
     
     public List<Usuario> getUsuarios() {
         return getUsuarioDAO().getUsuarios();

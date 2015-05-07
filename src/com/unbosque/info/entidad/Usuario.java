@@ -13,8 +13,19 @@ import javax.persistence.Id;
 @Entity
 @NamedQuery(name="Usuario.findAll", query="SELECT u FROM Usuario u")
 public class Usuario implements Serializable {
+
+
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 
+	@Column(name="tipo_usuario")
+	private String tipoUsuario;
+	
+	private String intentos;
+
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
@@ -34,11 +45,11 @@ public class Usuario implements Serializable {
 
 
 	private String login;
+	
+
 
 	private String password;
 
-	@Column(name="tipo_usuario")
-	private String tipoUsuario;
 
 	public Usuario() {
 	}
@@ -91,7 +102,13 @@ public class Usuario implements Serializable {
 		this.fechaCreacion = fechaCreacion;
 	}
 
-
+	public String setIntentos(String intentos) {
+		return this.intentos = intentos;
+	}
+	
+	public String getIntentos() {
+		return intentos;
+	}
 
 	public String getLogin() {
 		return this.login;
@@ -116,5 +133,7 @@ public class Usuario implements Serializable {
 	public void setTipoUsuario(String tipoUsuario) {
 		this.tipoUsuario = tipoUsuario;
 	}
+	
+
 
 }

@@ -1,6 +1,7 @@
 package com.unbosque.info.entidad;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
 
 
@@ -11,12 +12,15 @@ import javax.persistence.*;
 @Entity
 @NamedQuery(name="Paciente.findAll", query="SELECT p FROM Paciente p")
 public class Paciente implements Serializable {
-	private static final long serialVersionUID = 1L;
+
 
 	private String correo;
 
 	private String estado;
 
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	@Column(name="id_proyecto")

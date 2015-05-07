@@ -16,15 +16,15 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.CellEditEvent;
-import org.primefaces.event.RowEditEvent;
 import org.springframework.dao.DataAccessException;
+
 
 
 
 import com.unbosque.info.entidad.Usuario;
 import com.unbosque.info.service.UsuarioService;
 import com.unbosque.info.util.CifrarClave;
+import com.unbosque.info.util.Mails;
 
 @ManagedBean(name = "usuarioMBController")
 @ViewScoped
@@ -43,6 +43,7 @@ public class UsuarioManagedBean implements Serializable   {
 
 
 	List<Usuario> usuarioList=null;
+	List<Usuario> filtrados=null;
 	private CifrarClave cif=new CifrarClave();
 	private Integer id;
 	private String apellidosNombres;
@@ -54,15 +55,20 @@ public class UsuarioManagedBean implements Serializable   {
 	private String password;
 	private String tipoUsuario;
 	private Date  fecha = new Date();
-	private String loginn;
-	private String passwordn;
-	private String correon;
-	private String ApellidosNombresn;
+	private int intentos;
+	
 	
 	@PostConstruct
 	public void init(){
 		usuarioList = new ArrayList<Usuario>();
+		filtrados=new ArrayList<Usuario>();
 		  usuarioList.addAll(getUsuarioService().getUsuarios());
+	}
+	
+	public void reiniciar(Usuario usu){
+		usu.setIntentos("0");
+		usuarioList=getUsuarioService().getUsuarios();
+		
 	}
 
     public void onCellEdit(Usuario usuario1) {
@@ -70,34 +76,28 @@ public class UsuarioManagedBean implements Serializable   {
     	if(!comp.getPassword().equals(usuario1.getPassword()))
     	{
     		usuario1.setPassword(cif.cifradoClave(usuario1.getPassword()));
+    		usuario1.setFechaClave(new Timestamp(fecha.getTime())); 
+    		getUsuarioService().updateUsuario(usuario1);
+    	
     	}
     	getUsuarioService().updateUsuario(usuario1);
     	
+    	
+    	
     }
-
-	
-	public String getLoginn() {
-		return loginn;
-	}
-
-	public void setLoginn(String loginn) {
-		this.loginn = loginn;
-	}
     
 
 	
 	public void addUsuario() {
 		try {
-
-			RequestContext context = RequestContext.getCurrentInstance();
-			FacesMessage message = null;
 			
 			Usuario usuario = new Usuario();
-			
+			Mails correo=new Mails();
 			
 			usuario.setApellidosNombres(getApellidosNombres());
 			usuario.setCorreo(getCorreo());
 			usuario.setEstado("A");  
+			usuario.setIntentos("0");
 	        usuario.setFechaClave(new Timestamp(fecha.getTime())); 
      		usuario.setFechaCreacion(new Timestamp(fecha.getTime())); 
 		
@@ -106,10 +106,10 @@ public class UsuarioManagedBean implements Serializable   {
 			usuario.setTipoUsuario("U"); 
 
 			getUsuarioService().addUsuario(usuario);
-			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "",
-					"Registro agregado exitosamente.");
 			usuarioList=getUsuarioService().getUsuarios();
-
+			correo.mai(getPassword(), getCorreo());
+			
+			
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 		}
@@ -125,14 +125,41 @@ public class UsuarioManagedBean implements Serializable   {
 		Usuario usuario=getUsuarioService().getUsuarioByLogin(getLogin(),cif.cifradoClave(getPassword()));
 		boolean logeado=false;
 		if(usuario!=null){
-		message = new FacesMessage(FacesMessage.SEVERITY_INFO, "",
-				"Correcto");
-		logeado=true;
-		if(usuario.getTipoUsuario().equals("A"))
+		message = new FacesMessage(FacesMessage.SEVERITY_INFO, "","Correcto");
+		int intentos=Integer.parseInt(usuario.getIntentos());
+		String activo=usuario.getEstado();
+		System.out.println(activo);
+		if(usuario.getTipoUsuario().equals("A") && !activo.equals("I"))
 		extcont.redirect("paneladmin.xhtml"); //redirigo
-		else{
+		else if(activo.equals("I")){
+			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "","cuenta desactivada");
+		}
+		else if(!activo.equals("I")){
 		extcont.redirect("panelusuario.xhtml");
 		}
+		else{
+			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "","cuenta desactivada");
+		}
+		}
+		
+		else if((usuario=getUsuarioService().getUsuarioByName(getLogin()))!=null){
+			intentos=Integer.parseInt(usuario.getIntentos());
+			if(intentos<3 && !usuario.getEstado().equals("I"))
+			{
+			intentos=Integer.parseInt(usuario.getIntentos());
+			usuario.setIntentos(""+(intentos+1));
+			getUsuarioService().updateUsuario(usuario);
+			message=new FacesMessage(FacesMessage.SEVERITY_INFO,"","contraseña erronea posee:"+(3-intentos)+" intentos");
+			if(intentos==2){
+				usuario.setIntentos("0");
+				usuario.setEstado("I");
+				getUsuarioService().updateUsuario(usuario);
+				
+			}
+			}
+			else{
+				message = new FacesMessage(FacesMessage.SEVERITY_INFO, "","cuenta desactivada");
+			}
 		}
 		else{
 			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "",
@@ -145,30 +172,7 @@ public class UsuarioManagedBean implements Serializable   {
 	}
 
 	
-	public String getPasswordn() {
-		return passwordn;
-	}
-
-	public void setPasswordn(String passwordn) {
-		this.passwordn = passwordn;
-	}
-
-	public String getCorreon() {
-		return correon;
-	}
-
-	public void setCorreon(String correon) {
-		this.correon = correon;
-	}
-
-	public String getApellidosNombresn() {
-		return ApellidosNombresn;
-	}
-
-	public void setApellidosNombresn(String apellidosNombresn) {
-		ApellidosNombresn = apellidosNombresn;
-	}
-
+	
 	public void borrar(Usuario usuario){
 		getUsuarioService().deleteUsuario(usuario);
 		usuarioList=getUsuarioService().getUsuarios();
@@ -367,32 +371,26 @@ public class UsuarioManagedBean implements Serializable   {
 		return password;
 	}
 
-
-
-
-
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
-
-
-
 
 	public String getTipoUsuario() {
 		return tipoUsuario;
 	}
 
 
-
-
-
 	public void setTipoUsuario(String tipoUsuario) {
 		this.tipoUsuario = tipoUsuario;
 	}
 
-	
+	public int getIntentos() {
+		return intentos;
+	}
 
+	public void setIntentos(int intentos) {
+		this.intentos = intentos;
+	}
 
 
 }

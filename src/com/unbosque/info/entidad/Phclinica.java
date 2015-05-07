@@ -1,7 +1,9 @@
 package com.unbosque.info.entidad;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.sql.Timestamp;
 
 
@@ -12,13 +14,21 @@ import java.sql.Timestamp;
 @Entity
 @NamedQuery(name="Phclinica.findAll", query="SELECT p FROM Phclinica p")
 public class Phclinica implements Serializable {
-	private static final long serialVersionUID = 1L;
+
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6233249412567589769L;
 
 	private String estado;
 
 	@Column(name="fecha_hclinica")
 	private Timestamp fechaHclinica;
 
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	@Column(name="id_dieta")

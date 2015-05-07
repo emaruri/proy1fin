@@ -43,6 +43,20 @@ public class UsuarioDAO {
         return (Usuario) list.get(0);
     }
     
+    public Usuario getUsuarioByname(String name){
+    	try{
+    	List list=getSessionFactory().getCurrentSession()
+    			.createQuery("from Usuario where login=?").setParameter(0, name)
+    			.list();
+    	return(Usuario)list.get(0);
+    	}
+    	catch(IndexOutOfBoundsException e){
+    		return null;
+    	}
+    	
+    	
+    }
+    
     public Usuario getUsuarioByLogin(String login,String password){
     	try{
     	List list=getSessionFactory().getCurrentSession()

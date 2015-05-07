@@ -12,11 +12,26 @@
   <!-- Beans Declaration -->
  
 <bean id="Usuario" class="com.unbosque.info.entidad.Usuario" />
+<bean id="Tratamiento" class="com.unbosque.info.entidad.Tratamiento" />
+<bean id="Paciente" class="com.unbosque.info.entidad.Paciente" />
+<bean id="Phclinica" class="com.unbosque.info.entidad.Phclinica" />
 
   <!-- User Service Declaration -->
  
       <bean id="UsuarioService" class="com.unbosque.info.service.UsuarioService">
     <property name="UsuarioDAO" ref="UsuarioDAO" />
+  </bean>
+  
+        <bean id="TratamientoService" class="com.unbosque.info.service.TratamientoService">
+    <property name="TratamientoDAO" ref="TratamientoDAO" />
+  </bean>
+  
+          <bean id="PacienteService" class="com.unbosque.info.service.PacienteService">
+    <property name="PacienteDAO" ref="PacienteDAO" />
+  </bean>
+  
+            <bean id="PhclinicaService" class="com.unbosque.info.service.PhclinicaService">
+    <property name="PhclinicaDAO" ref="PhclinicaDAO" />
   </bean>
   
 
@@ -26,6 +41,17 @@
     <property name="sessionFactory" ref="SessionFactory" />
   </bean>
 
+     <bean id="TratamientoDAO" class="com.unbosque.info.dao.TratamientoDAO">
+    <property name="sessionFactory" ref="SessionFactory" />
+  </bean>
+  
+       <bean id="PacienteDAO" class="com.unbosque.info.dao.PacienteDAO">
+    <property name="sessionFactory" ref="SessionFactory" />
+  </bean>
+
+       <bean id="PhclinicaDAO" class="com.unbosque.info.dao.PhclinicaDAO">
+    <property name="sessionFactory" ref="SessionFactory" />
+  </bean>
 
   <!-- Data Source Declaration -->
   <bean id="DataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
@@ -46,8 +72,10 @@
     <property name="dataSource" ref="DataSource" />
     <property name="annotatedClasses">
       <list>
-        
         <value>com.unbosque.info.entidad.Usuario</value>
+         <value>com.unbosque.info.entidad.Tratamiento</value>
+         <value>com.unbosque.info.entidad.Paciente</value>
+         <value>com.unbosque.info.entidad.Phclinica</value>
       </list>
     </property>
     <property name="hibernateProperties">
@@ -68,3 +96,4 @@
   </bean>
 
 </beans>
+
