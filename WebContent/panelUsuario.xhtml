@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	    <script>
+    function soloLetras(e){
+       key = e.keyCode || e.which;
+       tecla = String.fromCharCode(key).toLowerCase();
+       letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
+       especiales = "8-37-39-46";
+
+       tecla_especial = false
+       for(var i in especiales){
+            if(key == especiales[i]){
+                tecla_especial = true;
+                break;
+            }
+        }
+
+        if(letras.indexOf(tecla)==-1 ){
+        	if(!tecla_especial){
+        		
+        	
+            return false;
+        	}
+        }
+    }
+</script> 
+	</h:head>
+<body>
+
+<center><h1>Médico</h1></center>
+ 
+<h:form>  
+    <p:growl id="messages"/>
+ 
+    <p:menubar>       
+        
+        <f:facet name="options">
+            <p:inputText style="margin-right:10px" placeholder="Search"/>
+            <p:button outcome="index" value="cerrar sesión" icon="ui-icon-extlink"></p:button>
+            
+        </f:facet>
+    </p:menubar>
+</h:form>
+<center><h1>História Clínica</h1></center>
+<h:form>
+<table border="1">
+
+<tr>
+<th>Fecha de ingreso</th>
+<th>Tipo de paciente  </th>
+<th>Nombre del titular    </th>
+<th>Cédula del titular</th>
+</tr>
+
+<tr>
+<td><h:outputText value="aquí va fecha del sistema" ></h:outputText></td>
+<td><h:inputText id="tipoPaciente" onkeypress="return soloLetras(event)" value="#{beanMedico.tipoPaciente}" required="true"></h:inputText></td>
+<td><h:inputText id="nombreTitular" onkeypress="return soloLetras(event)" value="#{beanMedico.nombresApellidos}" required="true"></h:inputText></td>
+<td><h:inputText id="cedula" value="#{beanMedico.cedula}" required="true"></h:inputText></td>
+</tr>
+
+<tr>
+<th>Dirección</th>
+<th>Correo</th>
+<th>Ocupación</th>
+<th>Enfermedad</th>
+</tr>
+<tr>
+<td><h:inputText id="direccion" value="#{beanMedico.direccion}" required="true"></h:inputText></td>
+<td><h:inputText id="correo" value="#{beanMedico.correo}" required="true" validatorMessage="Formato incorrecto, ingese un correo de tipo xxxx@xxxx.com">
+        <f:validateRegex
+		pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+        </h:inputText></td>
+<td><h:inputText id="ocupacion" onkeypress="return soloLetras(event)" value="#{beanMedico.ocupacion}" required="true"></h:inputText></td>
+<td><h:inputText id="enfermedad" value="#{beanMedico.enfermedad}" required="true"></h:inputText></td>
+</tr>
+</table>
+<br/>
+
+<h:outputText value="El paciente se encuentra adscrito al sistema de dietas?"/>
+<h:selectOneRadio>
+<f:selectItem itemValue="si" itemLabel="Si" />
+<f:selectItem itemValue="No" itemLabel="No" />
+</h:selectOneRadio>
+
+<h:commandButton value="Generar tratamiento"/>
+</h:form>
+
+</body>
+</html>

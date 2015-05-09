@@ -128,14 +128,20 @@ public class UsuarioManagedBean implements Serializable   {
 		message = new FacesMessage(FacesMessage.SEVERITY_INFO, "","Correcto");
 		int intentos=Integer.parseInt(usuario.getIntentos());
 		String activo=usuario.getEstado();
-		System.out.println(activo);
 		if(usuario.getTipoUsuario().equals("A") && !activo.equals("I"))
+		{
+		usuario.setIntentos("0");
+		getUsuarioService().updateUsuario(usuario);
 		extcont.redirect("paneladmin.xhtml"); //redirigo
+		}
 		else if(activo.equals("I")){
 			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "","cuenta desactivada");
 		}
 		else if(!activo.equals("I")){
+		usuario.setIntentos("0");
+		getUsuarioService().updateUsuario(usuario);
 		extcont.redirect("panelusuario.xhtml");
+		
 		}
 		else{
 			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "","cuenta desactivada");
@@ -149,11 +155,15 @@ public class UsuarioManagedBean implements Serializable   {
 			intentos=Integer.parseInt(usuario.getIntentos());
 			usuario.setIntentos(""+(intentos+1));
 			getUsuarioService().updateUsuario(usuario);
-			message=new FacesMessage(FacesMessage.SEVERITY_INFO,"","contraseña erronea posee:"+(3-intentos)+" intentos");
+			if(intentos<2){
+				message=new FacesMessage(FacesMessage.SEVERITY_INFO,"","contraseña erronea posee:"+(2-intentos)+" intentos");
+			}
 			if(intentos==2){
 				usuario.setIntentos("0");
 				usuario.setEstado("I");
 				getUsuarioService().updateUsuario(usuario);
+				message=new FacesMessage(FacesMessage.SEVERITY_INFO,"","cuenta desactivada");
+
 				
 			}
 			}

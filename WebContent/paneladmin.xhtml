@@ -6,38 +6,72 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <h:head>
+<script>
+    function soloLetras(e){
+       key = e.keyCode || e.which;
+       tecla = String.fromCharCode(key).toLowerCase();
+       letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
+       especiales = "8-37-39-46";
+
+       tecla_especial = false
+       for(var i in especiales){
+            if(key == especiales[i]){
+                tecla_especial = true;
+                break;
+            }
+        }
+
+        if(letras.indexOf(tecla)==-1 ){
+        	if(!tecla_especial){
+        		
+        	
+            return false;
+        	}
+        }
+    }
+</script>	
 
 	
 	</h:head>
-<body>
+<h:body>
+
 <a href="javascript:history.back()">Atras</a>
 <h:form>
 <h:commandButton value="dietas" action="dietas?faces-redirect=true" />
 <h:commandButton value="phclinica" action="phclinica?faces-redirect=true" />
 <h:commandButton value="pacientes" action="pacientes?faces-redirect=true" />
 </h:form>
-
+	
+	
 <p:accordionPanel>
 <p:tab title="Agregar usuarios:">
 <h:form>
     <h:panelGrid columns="2" cellpadding="5">
         
          <h:outputText value="ApellidosNombres: " />
-        <p:inputText id="ApellidosNombres" value="#{usuarioMBController.apellidosNombres}" required="true"/>
+        <p:inputText id="ApellidosNombres" onkeypress="return soloLetras(event)" value="#{usuarioMBController.apellidosNombres}" required="true"/>
         
 
         <h:outputText value="correo: " />
-        <p:inputText id="correo" value="#{usuarioMBController.correo}" />
+        <p:inputText id="correo" value="#{usuarioMBController.correo}" required="true" validatorMessage="Formato incorrecto, ingese un correo de tipo xxxx@xxxx.com">
+        <f:validateRegex
+		pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+        </p:inputText>
         
     
    
     
  
  		<h:outputText value="Usuario: " />
-        <p:inputText id="usuario" value="#{usuarioMBController.login}"/>
+ 		<p:inputMask  id="usuario"  value="#{usuarioMBController.login}" label="cosreo" mask="a?**********"  required="true" />   				     	
+      
+        
+        
         <h:outputText value="Contraseña: " />
-        <p:password id="feedback" value="#{usuarioMBController.password}" feedback="true" />
-
+        <p:password id="feedback" value="#{usuarioMBController.password}" feedback="true" maxlength="20" required="true">
+         <f:validateLength minimum="8" maximum="20">
+        </f:validateLength>
+        </p:password>
  
         
     </h:panelGrid>
@@ -96,7 +130,7 @@
 				footerText="" filterMatchMode="contains">
 				<p:cellEditor>
 					<f:facet name="output">
-						<h:outputText value="#{usuario.password}" />
+						<h:outputText value="xxxx" />
 					</f:facet>
 					<f:facet name="input">
 						<p:inputText value="#{usuario.password}" style="width:96%"
@@ -179,5 +213,5 @@
 	
 
 <br/>
-</body>
+</h:body>
 </html>
