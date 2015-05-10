@@ -1,0 +1,113 @@
+package com.unbosque.info.beans;
+
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
+
+import com.unbosque.info.entidad.Phclinica;
+import com.unbosque.info.service.PhclinicaService;
+
+@ManagedBean(name = "PhclinicaMBC")
+@ViewScoped
+public class PhclinicaManagedBean implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -481150793893597715L;
+
+	// Spring Customer Service is injected...
+		@ManagedProperty(value = "#{PhclinicaService}")
+		PhclinicaService phclinicaService;
+
+	private ArrayList<Phclinica> lista;
+	private String estado;
+	private Timestamp fechaHclinica;
+	private Integer id;
+	private Integer idDieta;
+	private Integer idEnfermedad;
+	private Integer idPaciente;
+	private Integer idTratamiento;
+	
+	@PostConstruct
+	public void init(){
+		lista=new ArrayList<Phclinica>();
+		lista.addAll(getPhclinicaService().getPhclinicas());
+		
+	}
+	
+	public void onCellEdit(Phclinica phcli){
+		getPhclinicaService().updatePhclinica(phcli);
+	}
+	
+	public PhclinicaService getPhclinicaService() {
+		return phclinicaService;
+	}
+	public void setPhclinicaService(PhclinicaService phclinicaService) {
+		this.phclinicaService = phclinicaService;
+	}
+	
+	public String getEstado() {
+		return estado;
+	}
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+	public Timestamp getFechaHclinica() {
+		return fechaHclinica;
+	}
+	public void setFechaHclinica(Timestamp fechaHclinica) {
+		this.fechaHclinica = fechaHclinica;
+	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public Integer getIdDieta() {
+		return idDieta;
+	}
+	public void setIdDieta(Integer idDieta) {
+		this.idDieta = idDieta;
+	}
+	public Integer getIdEnfermedad() {
+		return idEnfermedad;
+	}
+	public void setIdEnfermedad(Integer idEnfermedad) {
+		this.idEnfermedad = idEnfermedad;
+	}
+	public Integer getIdPaciente() {
+		return idPaciente;
+	}
+	public void setIdPaciente(Integer idPaciente) {
+		this.idPaciente = idPaciente;
+	}
+	public Integer getIdTratamiento() {
+		return idTratamiento;
+	}
+	public void setIdTratamiento(Integer idTratamiento) {
+		this.idTratamiento = idTratamiento;
+	}
+
+	public ArrayList<Phclinica> getLista() {
+		return lista;
+	}
+
+	public void setLista(ArrayList<Phclinica> lista) {
+		this.lista = lista;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	
+	
+
+
+}
