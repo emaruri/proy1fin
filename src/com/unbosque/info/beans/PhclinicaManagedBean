@@ -1,8 +1,12 @@
 package com.unbosque.info.beans;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -25,9 +29,17 @@ public class PhclinicaManagedBean implements Serializable {
 		@ManagedProperty(value = "#{PhclinicaService}")
 		PhclinicaService phclinicaService;
 
-	private ArrayList<Phclinica> lista;
+	private List<Phclinica> lista=null;
 	private String estado;
-	private Timestamp fechaHclinica;
+	public String getFechaHclinica() {
+		return fechaHclinica;
+	}
+
+	public void setFechaHclinica(String fechaHclinica) {
+		this.fechaHclinica = fechaHclinica;
+	}
+
+	private String fechaHclinica;
 	private Integer id;
 	private Integer idDieta;
 	private Integer idEnfermedad;
@@ -37,7 +49,32 @@ public class PhclinicaManagedBean implements Serializable {
 	@PostConstruct
 	public void init(){
 		lista=new ArrayList<Phclinica>();
-		lista.addAll(getPhclinicaService().getPhclinicas());
+		lista=getPhclinicaService().getPhclinicas();
+		
+	}
+	
+	public List<Phclinica> getLista() {
+		return lista;
+	}
+
+	public void setLista(List<Phclinica> lista) {
+		this.lista = lista;
+	}
+
+	public void grabar() throws ParseException{
+		Phclinica grabadora=new Phclinica();
+		SimpleDateFormat datos=new SimpleDateFormat("dd/mm/yyyy");
+		java.util.Date pars=datos.parse(getFechaHclinica());
+		java.sql.Timestamp times = new java.sql.Timestamp(pars.getTime());
+		grabadora.setFechaHclinica(times);
+		grabadora.setEstado(getEstado());
+		grabadora.setId(getId());
+		grabadora.setIdDieta(getIdDieta());
+		grabadora.setIdPaciente(getIdPaciente());
+		grabadora.setIdEnfermedad(getIdEnfermedad());
+		grabadora.setIdTratamiento(getIdTratamiento());
+		getPhclinicaService().addPhclinica(grabadora);
+		lista=getPhclinicaService().getPhclinicas();
 		
 	}
 	
@@ -58,12 +95,7 @@ public class PhclinicaManagedBean implements Serializable {
 	public void setEstado(String estado) {
 		this.estado = estado;
 	}
-	public Timestamp getFechaHclinica() {
-		return fechaHclinica;
-	}
-	public void setFechaHclinica(Timestamp fechaHclinica) {
-		this.fechaHclinica = fechaHclinica;
-	}
+
 	public Integer getId() {
 		return id;
 	}
@@ -95,9 +127,6 @@ public class PhclinicaManagedBean implements Serializable {
 		this.idTratamiento = idTratamiento;
 	}
 
-	public ArrayList<Phclinica> getLista() {
-		return lista;
-	}
 
 	public void setLista(ArrayList<Phclinica> lista) {
 		this.lista = lista;
