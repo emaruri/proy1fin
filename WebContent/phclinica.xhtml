@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+
+<body>
+<a href="javascript:history.back()">Atras</a>
+<h:form>
+<p:accordionPanel>
+<p:tab title="agregar historial:">
+<h:panelGrid columns="2" cellpadding="5">
+<h:outputText value="id de la enfermedad:"/>
+
+<p:inputMask  id="ids"  value="#{PhclinicaMBC.idEnfermedad}" mask="9?9999"  required="true" />   				     	
+
+
+<h:outputText value="id paciente:"/>
+<p:inputMask  id="idpaciente"  value="#{PhclinicaMBC.idPaciente}" mask="9?9999"  required="true" />   				     	
+
+<h:outputText value="fecha clinica:"/>
+<p:inputMask  id="idclinica"  value="#{PhclinicaMBC.fechaHclinica}" mask="99/99/9999"  required="true" />   				     	
+
+<h:outputText value="id enfermedad:"/>
+<p:inputMask  id="idenfermdad"  value="#{PhclinicaMBC.idEnfermedad}" mask="9?9999"  required="true" />   				     	
+
+<h:outputText value="estado:"/>
+<p:inputMask id="estado"  value="#{PhclinicaMBC.estado}" mask="a"  required="true" />   				     	
+
+
+    <p:commandButton id="addhistorial" value="Grabar" actionListener="#{PhclinicaMBC.grabar}" ajax="false"/>
+
+</h:panelGrid>
+</p:tab>
+</p:accordionPanel>
+
+</h:form>
+
+
+<h:form id="form">
+<p:growl id="msgs" showDetail="true" />
+		<p:dataTable id="dietaList" var="historial"
+			value="#{PhclinicaMBC.lista}" editable="true"
+			editMode="cell" widgetVar="cellUser">
+			
+						
+						<p:ajax event="cellEdit" listener="#{PhclinicaMBC.onCellEdit(historial)}"
+				update=":form:msgs" />
+			
+			<f:facet name="header">
+           dietas
+                    <p:outputPanel>
+					<h:outputText value="Busqueda global:" />
+					<p:inputText id="globalFilter" onkeyup="PF('cellUser').filter()"
+						style="width:150px" placeholder="." />
+				</p:outputPanel>
+			</f:facet>
+			
+		
+			<p:column headerText="descripcion" filterBy="#{historial.idEnfermedad}"
+				footerText=" " filterMatchMode="contains">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{historial.idEnfermedad}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText value="#{historial.idEnfermedad}" style="width:96%"
+							label="correo" />        
+					</f:facet>
+				</p:cellEditor>
+				</p:column>	
+			
+						<p:column headerText="id paciente" filterBy="#{historial.idPaciente}"
+				footerText=" " filterMatchMode="contains">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{historial.idPaciente}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputMask  id="idpaciente" label="correo"  value="#{historial.idPaciente}" mask="9?9999"  required="true" />   				     	       
+					</f:facet>
+				</p:cellEditor>
+				</p:column>	
+				
+				<p:column headerText="fecha clinica" filterBy="#{historial.fechaHclinica}"
+				footerText=" " filterMatchMode="contains">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{historial.fechaHclinica}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputMask  id="idclinica"  value="#{historial.fechaHclinica}" mask="99/99/9999"  required="true" label="correo" />        
+					</f:facet>
+				</p:cellEditor>
+				</p:column>	
+				
+				<p:column headerText="id enfermedad" filterBy="#{historial.idEnfermedad}"
+				footerText=" " filterMatchMode="contains">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{historial.idEnfermedad}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputMask  id="idenfermedad"  value="#{historial.idEnfermedad}" mask="9?9999"  required="true" />   				     	
+					</f:facet>
+				</p:cellEditor>
+				</p:column>	
+				
+				
+				<p:column headerText="id dieta" filterBy="#{historial.idDieta}"
+				footerText=" " filterMatchMode="contains">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{historial.idDieta}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputMask  id="iddieta"  value="#{historial.idDieta}" mask="9?9999"  required="true" />   				     	     
+					</f:facet>
+				</p:cellEditor>
+				</p:column>	
+			
+			<p:column headerText="estado" filterBy="#{historial.estado}"
+				footerText=" " filterMatchMode="contains">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{historial.estado}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputMask id="estado"  value="#{historial.estado}" mask="a"  required="true" label="correo" />        
+					</f:facet>
+				</p:cellEditor>
+				</p:column>		
+			
+			
+			
+			
+		</p:dataTable>
+		</h:form>
+
+
+</body>
+</html>
